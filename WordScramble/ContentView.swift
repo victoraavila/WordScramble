@@ -36,11 +36,20 @@ struct ContentView: View {
                 
                 Section {
                     ForEach(usedWords, id: \.self) { word in
+                        // VoiceOver/Accessibility notes
+                        // The score of the guessed word and the word itself are treated as separated elements when reading out
+                        // The best way of solving this is grouping both Views in a single element where the children are ignored by VoiceOver and there is a label for the whole group with a much more natural description
                         HStack {
                             // Use SF Symbols to show how many letters the input word has
                             Image(systemName: "\(word.count).circle")
                             Text(word)
                         }
+                        .accessibilityElement() // children: .ignore is the default
+                        .accessibilityLabel("\(word), \(word.count) letters")
+                        
+                        // Alternatively, it could have an .accessibilityLabel and an .accessibilityHint
+//                        .accessibilityLabel(word)
+//                        .accessibilityHint("\(word.count) letters") // Read after a short pause
                     }
                 }
                 
